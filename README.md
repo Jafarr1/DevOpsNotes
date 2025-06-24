@@ -35,17 +35,29 @@ on:
     branches: [development, main]
 ```
 
-**Shift left security + Automation First**
+**Shift left security**
 
 *Sikkerhedsvalidering sker tidligt – før merge, før deploy eller ved manuel test:*
-
-*Workflowet kører ved hver ændring, hver PR, hver deploy. Det sikrer konstant overvågning af sikkerheds-konfigurationer.*
 
 ```
 on:
   pull_request:
   workflow_dispatch:
   workflow_call:
+
+```
+
+**Automation First**
+
+*Alle valideringer kører automatisk som kode uden manuel indgriben i CI/CD-pipelinen.:*
+
+```
+jobs:
+  validate-secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check secrets
+        run: ./validate-secrets.sh
 
 
 ```
@@ -75,6 +87,40 @@ jobs:
     echo "::error::Secret DEV_SSH_PRIVATE_KEY is required for environment 'development' but was not provided."
     exit 1
 ```
+
+
+**Lokal sikkerhed og konfiguration med Python**
+
+*Vi bruger et Python-script til hurtigt at tjekke nødvendige miljøvariabler og køre Docker-containeren lokalt.
+ Det sikrer, at .env-filer er på plads, og at porte og navne er korrekte, før build og run.*
+
+ ```
+if __name__ == "__main__":
+   if not makefile_env_loader.check_env():
+      print(" \n"
+            "Error: Required environment file .env.local.frontend not found.\n"
+            "-> copy and edit the template: \n"
+            "  cp .env.local.frontend.template .env.local.frontend \n"
+            " \n",
+            file=sys.stderr)
+      sys.exit(1)
+      
+   run_dev_docker()
+
+```
+
+
+
+**Sikkerhed og Static Application Security Testing (SAST)**
+
+- Vi bruger SonarQube til statisk kodeanalyse og sikkerhedsscanning.
+
+- SonarQube er integreret i vores CI/CD pipeline via GitHub Actions.
+
+- Ved hver push til dev-branch eller ved pull requests kører der en SonarQube-scanning.
+
+- Scanningen giver rapporter om kodekvalitet og potentielle sikkerhedssårbarheder, som skal rettes inden koden kan merges.
+
 
 
 
