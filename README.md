@@ -113,14 +113,25 @@ if __name__ == "__main__":
 
 **Sikkerhed og Static Application Security Testing (SAST)**
 
+**SonarQube**
+
 - Vi bruger SonarQube til statisk kodeanalyse og sikkerhedsscanning.
 
 - SonarQube er integreret i vores CI/CD pipeline via GitHub Actions.
 
-- Ved hver push til dev-branch eller ved pull requests kører der en SonarQube-scanning.
+- Ved hver push til dev- eller test-branch eller ved pull requests kører der en SonarQube-scanning.
 
 - Scanningen giver rapporter om kodekvalitet og potentielle sikkerhedssårbarheder, som skal rettes inden koden kan merges.
 
+**DeepSource**
+
+- Vi bruger DeepSource som et supplerende værktøj til statisk analyse og sikkerhedsscanning af vores kodebase.
+  
+- DeepSource er integreret direkte med GitHub og scanner automatisk ny kode ved hver commit og pull request.
+
+- DeepSource fokuserer på hurtig feedback og kontinuerlig forbedring med automatiske forslag til kodeforbedringer.
+
+- Understøtter flere sprog og teknologier, herunder Rust, YAML, Shell og Docker, som vi bruger i projektet.
 
 
 
